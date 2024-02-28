@@ -9,11 +9,16 @@ export const signup = async (req, res, next) => {
   const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
   const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
 
-  if (!fullName || !username || !password || !cPassword || !gender)
+  if (!fullName || !username || !password || !cPassword || !gender) {
     return next(errorHandler(400, "The required fields must be filled."));
+  }
 
   if (password != cPassword) {
     return next(errorHandler(400, "Passwords don't match."));
+  }
+
+  if (password.length < 6) {
+    return next(errorHandler(400, "Password must be at least 6 characters."));
   }
 
   try {
@@ -41,6 +46,11 @@ export const signup = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   const { username, password } = req.body;
+
+  if (!username || !password) {
+    return next(errorHandler(400, "The required fields must be filled."));
+  }
+
   try {
     const validUser = await User.findOne({ username });
     if (!validUser) return next(errorHandler(404, "User not found!"));

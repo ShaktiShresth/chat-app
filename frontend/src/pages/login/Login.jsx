@@ -1,4 +1,18 @@
+import { Link } from "react-router-dom";
+import useLogin from "../../hooks/useLogin";
+import { useState } from "react";
+
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { loading, login } = useLogin();
+
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
+    await login(username, password);
+  };
+
   return (
     <div className="flex items-center justify-center sm:min-w-96 mx-auto">
       <div className="flex flex-col gap-8 w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
@@ -7,7 +21,7 @@ const Login = () => {
           <span className="text-blue-500"> ChatApp</span>
         </h1>
 
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div>
             <label className="input input-bordered flex items-center gap-2">
               <svg
@@ -18,7 +32,13 @@ const Login = () => {
               >
                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
               </svg>
-              <input type="text" className="grow" placeholder="Username" />
+              <input
+                type="text"
+                className="grow"
+                placeholder="Username"
+                value={username}
+                onChange={(ev) => setUsername(ev.target.value)}
+              />
             </label>
           </div>
 
@@ -36,20 +56,30 @@ const Login = () => {
                   clipRule="evenodd"
                 />
               </svg>
-              <input type="password" className="grow" placeholder="Password" />
+              <input
+                type="password"
+                className="grow"
+                placeholder="Password"
+                value={password}
+                onChange={(ev) => setPassword(ev.target.value)}
+              />
             </label>
           </div>
 
-          <a
-            href="#"
+          <Link
+            to={"/signup"}
             className="inline-block text-sm hover:underline hover:text-blue-600"
           >
             {"Don't"} have an account?
-          </a>
+          </Link>
 
           <div>
             <button className="btn glass w-full text-gray-700 hover:text-white">
-              Login
+              {loading ? (
+                <span className="loading loading-spinner "></span>
+              ) : (
+                "Login"
+              )}
             </button>
           </div>
         </form>
