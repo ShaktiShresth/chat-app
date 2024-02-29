@@ -5,9 +5,8 @@ import messageRoutes from "./routes/message.route.js";
 import userRoutes from "./routes/user.route.js";
 import connectToMongo from "./db/connectToMongo.js";
 import cookieParser from "cookie-parser";
+import { app, server } from "./socket/socket.js";
 dotenv.config();
-
-const app = express();
 
 const PORT = process.env.PORT || 5000;
 
@@ -23,7 +22,7 @@ app.use("/api/users", userRoutes);
 //   res.json("Hello from the server side of the chat app.");
 // });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   connectToMongo();
   console.log(`Server is running at port ${PORT}`);
 });
